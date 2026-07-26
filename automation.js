@@ -89,8 +89,38 @@
 
 
 
-    // Buy available upgrades
-    CH.modules.automation.autoUpgrade = function () {
+    // Smart upgrade buying
+CH.modules.automation.autoUpgrade = function () {
+
+    if (
+        CH.utils.enabled("autoUpgrade")
+        && typeof Game !== "undefined"
+    ) {
+
+
+        if (!CH.modules.economy) {
+            return;
+        }
+
+
+        let best =
+            CH.modules.economy.getBestUpgrade();
+
+
+        if (best) {
+
+            best.buy();
+
+            CH.utils.log(
+                "Bought best upgrade: "
+                + best.name
+            );
+
+        }
+
+    }
+
+};
 
         if (
             CH.utils.enabled("autoUpgrade")
