@@ -5,41 +5,54 @@
 (function () {
     "use strict";
 
+
     const CH = window.CookieHelper;
 
+
     if (!CH) {
-        console.error("Cookie Helper core missing!");
+        console.error(
+            "Cookie Helper core missing!"
+        );
         return;
     }
 
+
     CH.modules.automation = {};
+
 
 
     // Auto click big cookie
     CH.modules.automation.autoClick = function () {
 
         if (
-            CH.utils.enabled("autoClick") &&
-            typeof Game !== "undefined"
+            CH.utils.enabled("autoClick")
+            && typeof Game !== "undefined"
         ) {
+
             Game.ClickCookie();
+
         }
 
     };
 
 
-    // Auto click golden cookies
+
+    // Auto click golden cookies and other shimmers
     CH.modules.automation.autoGolden = function () {
 
         if (
-            CH.utils.enabled("autoGolden") &&
-            typeof Game !== "undefined"
+            CH.utils.enabled("autoGolden")
+            && typeof Game !== "undefined"
         ) {
 
             Game.shimmers.forEach(shimmer => {
 
-                if (shimmer.type === "golden") {
+                if (
+                    shimmer.type === "golden"
+                ) {
+
                     shimmer.pop();
+
                 }
 
             });
@@ -47,20 +60,25 @@
         }
 
     };
+
 
 
     // Auto click reindeer
     CH.modules.automation.autoReindeer = function () {
 
         if (
-            CH.utils.enabled("autoReindeer") &&
-            typeof Game !== "undefined"
+            CH.utils.enabled("autoReindeer")
+            && typeof Game !== "undefined"
         ) {
 
             Game.shimmers.forEach(shimmer => {
 
-                if (shimmer.type === "reindeer") {
+                if (
+                    shimmer.type === "reindeer"
+                ) {
+
                     shimmer.pop();
+
                 }
 
             });
@@ -70,65 +88,74 @@
     };
 
 
-    // Smart upgrades
+
+    // Buy available upgrades
     CH.modules.automation.autoUpgrade = function () {
 
         if (
-            CH.utils.enabled("autoUpgrade") &&
-            typeof Game !== "undefined"
+            CH.utils.enabled("autoUpgrade")
+            && typeof Game !== "undefined"
         ) {
 
-            if (!CH.modules.economy) return;
 
-            let best =
-                CH.modules.economy.getBestUpgrade();
+            Game.UpgradesInStore.forEach(upgrade => {
 
-            if (best) {
-                best.buy();
+                if (
+                    upgrade.canBuy()
+                ) {
 
-                CH.utils.log(
-                    "Bought best upgrade: " + best.name
-                );
-            }
+                    upgrade.buy();
+
+                }
+
+            });
 
         }
 
     };
 
 
-    // Smart buildings
+
+    // Buy affordable buildings
     CH.modules.automation.autoBuild = function () {
 
         if (
-            CH.utils.enabled("autoBuild") &&
-            typeof Game !== "undefined"
+            CH.utils.enabled("autoBuild")
+            && typeof Game !== "undefined"
         ) {
 
-            if (!CH.modules.economy) return;
 
-            let best =
-                CH.modules.economy.getBestBuilding();
-
-            if (
-                best &&
-                best.getPrice() <= Game.cookies
-            ) {
-
-                best.buy();
-
-                CH.utils.log(
-                    "Bought best building: " + best.name
+            let buildings =
+                Game.ObjectsById.filter(
+                    building =>
+                    building.getPrice()
+                    <= Game.cookies
                 );
+
+
+            if (buildings.length > 0) {
+
+
+                buildings.sort(
+                    (a, b) =>
+                    b.storedCps -
+                    a.storedCps
+                );
+
+
+                buildings[0].buy();
 
             }
 
         }
 
     };
+
 
 
     // Start automation loops
     CH.modules.automation.start = function () {
+
 
         setInterval(() => {
 
@@ -141,6 +168,7 @@
         setInterval(() => {
 
             CH.modules.automation.autoGolden();
+
             CH.modules.automation.autoReindeer();
 
         }, 100);
@@ -150,9 +178,11 @@
         setInterval(() => {
 
             CH.modules.automation.autoUpgrade();
+
             CH.modules.automation.autoBuild();
 
         }, 1000);
+
 
 
         CH.utils.log(
@@ -162,6 +192,8 @@
     };
 
 
+
+    // Start when mod loads
     CH.modules.automation.start();
 
 
