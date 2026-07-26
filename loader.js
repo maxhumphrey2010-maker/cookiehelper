@@ -100,7 +100,11 @@
 
         style.href = "https://raw.githubusercontent.com/maxhumphrey2010-maker/cookiehelper/main/" + file;
 
-        document.head.appendChild(style);
+        script.onerror = function() {
+    console.error("Cookie Helper loader failed to load");
+};
+
+document.head.appendChild(script);
 
     }
 
