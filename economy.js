@@ -1,18 +1,14 @@
 // Cookie Helper+
 // economy.js
-// Economy calculations and smart purchasing helpers
+// Smart economy calculations
 
 (function () {
     "use strict";
 
-
     const CH = window.CookieHelper;
 
-
     if (!CH) {
-        console.error(
-            "Cookie Helper core missing!"
-        );
+        console.error("Cookie Helper core missing!");
         return;
     }
 
@@ -21,8 +17,8 @@
 
 
 
-    // Calculate building payback time
-    CH.modules.economy.getBuildingEfficiency = function (building) {
+    // Calculate how good a building is
+    CH.modules.economy.getBuildingScore = function (building) {
 
         if (!building) return 0;
 
@@ -30,22 +26,22 @@
         let price = building.getPrice();
 
 
-        let cpsIncrease =
-            building.storedCps || 0;
+        let cpsGain = building.storedCps || 0;
 
 
-        if (cpsIncrease <= 0) {
-            return Infinity;
+        if (price <= 0 || cpsGain <= 0) {
+            return 0;
         }
 
 
-        return price / cpsIncrease;
+        // Higher is better
+        return cpsGain / price;
 
     };
 
 
 
-    // Find the best building to buy
+    // Find best building available
     CH.modules.economy.getBestBuilding = function () {
 
 
@@ -56,9 +52,8 @@
 
         let buildings =
             Game.ObjectsById.filter(
-                building =>
-                building.getPrice()
-                <= Game.cookies
+                b =>
+                b.getPrice() <= Game.cookies
             );
 
 
@@ -67,15 +62,12 @@
         }
 
 
-        buildings.sort((a, b) => {
-
-            return (
-                CH.modules.economy.getBuildingEfficiency(a)
-                -
-                CH.modules.economy.getBuildingEfficiency(b)
-            );
-
-        });
+        buildings.sort(
+            (a, b) =>
+            CH.modules.economy.getBuildingScore(b)
+            -
+            CH.modules.economy.getBuildingScore(a)
+        );
 
 
         return buildings[0];
@@ -88,9 +80,7 @@
     CH.modules.economy.getUpgradeScore = function (upgrade) {
 
 
-        if (!upgrade) {
-            return 0;
-        }
+        if (!upgrade) return 0;
 
 
         let price =
@@ -102,13 +92,14 @@
         }
 
 
+        // Cheaper upgrades get higher priority
         return 1 / price;
 
     };
 
 
 
-    // Find best available upgrade
+    // Find best upgrade
     CH.modules.economy.getBestUpgrade = function () {
 
 
@@ -119,8 +110,8 @@
 
         let upgrades =
             Game.UpgradesInStore.filter(
-                upgrade =>
-                upgrade.canBuy()
+                u =>
+                u.canBuy()
             );
 
 
@@ -129,15 +120,12 @@
         }
 
 
-        upgrades.sort((a, b) => {
-
-            return (
-                CH.modules.economy.getUpgradeScore(b)
-                -
-                CH.modules.economy.getUpgradeScore(a)
-            );
-
-        });
+        upgrades.sort(
+            (a, b) =>
+            CH.modules.economy.getUpgradeScore(b)
+            -
+            CH.modules.economy.getUpgradeScore(a)
+        );
 
 
         return upgrades[0];
@@ -146,7 +134,7 @@
 
 
 
-    // Get current cookies per second
+    // Current CPS
     CH.modules.economy.getCPS = function () {
 
 
@@ -161,7 +149,7 @@
 
 
 
-    // Show recommendation
+    // Full recommendation
     CH.modules.economy.getRecommendation = function () {
 
 
@@ -173,14 +161,16 @@
             CH.modules.economy.getBestUpgrade();
 
 
-
         return {
 
-            building: building
+            building:
+                building
                 ? building.name
                 : "None",
 
-            upgrade: upgrade
+
+            upgrade:
+                upgrade
                 ? upgrade.name
                 : "None"
 
@@ -189,9 +179,8 @@
     };
 
 
-
     CH.utils.log(
-        "Economy system loaded."
+        "Smart economy system loaded."
     );
 
 
