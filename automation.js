@@ -116,8 +116,43 @@
 
 
 
-    // Buy affordable buildings
-    CH.modules.automation.autoBuild = function () {
+   // Smart building buying
+CH.modules.automation.autoBuild = function () {
+
+    if (
+        CH.utils.enabled("autoBuild")
+        && typeof Game !== "undefined"
+    ) {
+
+
+        if (!CH.modules.economy) {
+            return;
+        }
+
+
+        let best =
+            CH.modules.economy.getBestBuilding();
+
+
+        if (
+            best
+            &&
+            best.getPrice()
+            <= Game.cookies
+        ) {
+
+            best.buy();
+
+            CH.utils.log(
+                "Bought best building: "
+                + best.name
+            );
+
+        }
+
+    }
+
+};
 
         if (
             CH.utils.enabled("autoBuild")
