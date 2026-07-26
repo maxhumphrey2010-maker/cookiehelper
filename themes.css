@@ -1,0 +1,125 @@
+/*
+Cookie Helper+
+themes.css
+User interface styling
+*/
+
+
+#cookieHelperPanel {
+
+    box-shadow:
+        0 0 15px rgba(0,0,0,0.6);
+
+    border:
+        2px solid #c58b32;
+
+}
+
+
+#cookieHelperPanel h2 {
+
+    margin-top: 0;
+
+    color:
+        #ffd700;
+
+    text-align:
+        center;
+
+}
+
+
+
+#cookieHelperPanel hr {
+
+    border:
+        1px solid #555;
+
+}
+
+
+
+#cookieHelperPanel label {
+
+    display:
+        block;
+
+    margin:
+        8px 0;
+
+    cursor:
+        pointer;
+
+}
+
+
+
+#cookieHelperPanel input[type="checkbox"] {
+
+    transform:
+        scale(1.2);
+
+    margin-right:
+        8px;
+
+}
+
+
+
+#cookieHelperPanel button {
+
+    width:
+        100%;
+
+    margin-top:
+        12px;
+
+    padding:
+        8px;
+
+    border:
+        none;
+
+    border-radius:
+        6px;
+
+    background:
+        #c58b32;
+
+    color:
+        white;
+
+    font-weight:
+        bold;
+
+    cursor:
+        pointer;
+
+}
+
+
+
+#cookieHelperPanel button:hover {
+
+    background:
+        #e5a83b;
+
+}
+
+
+
+#chStats {
+
+    background:
+        rgba(255,255,255,0.08);
+
+    padding:
+        10px;
+
+    border-radius:
+        6px;
+
+    line-height:
+        1.6;
+
+}
