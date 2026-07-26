@@ -79,7 +79,7 @@
 
             let script = document.createElement("script");
 
-            script.src = "CookieHelper/" + file;
+            script.src = "https://raw.githubusercontent.com/maxhumphrey2010-maker/cookiehelper/main/" + file;
 
             script.onload = resolve;
 
