@@ -5,54 +5,41 @@
 (function () {
     "use strict";
 
-
     const CH = window.CookieHelper;
 
-
     if (!CH) {
-        console.error(
-            "Cookie Helper core missing!"
-        );
+        console.error("Cookie Helper core missing!");
         return;
     }
 
-
     CH.modules.automation = {};
-
 
 
     // Auto click big cookie
     CH.modules.automation.autoClick = function () {
 
         if (
-            CH.utils.enabled("autoClick")
-            && typeof Game !== "undefined"
+            CH.utils.enabled("autoClick") &&
+            typeof Game !== "undefined"
         ) {
-
             Game.ClickCookie();
-
         }
 
     };
 
 
-
-    // Auto click golden cookies and other shimmers
+    // Auto click golden cookies
     CH.modules.automation.autoGolden = function () {
 
         if (
-            CH.utils.enabled("autoGolden")
-            && typeof Game !== "undefined"
+            CH.utils.enabled("autoGolden") &&
+            typeof Game !== "undefined"
         ) {
 
             Game.shimmers.forEach(shimmer => {
 
-                if (
-                    shimmer.type === "golden"
-                ) {
-
+                if (shimmer.type === "golden") {
                     shimmer.pop();
-
                 }
 
             });
@@ -60,25 +47,20 @@
         }
 
     };
-
 
 
     // Auto click reindeer
     CH.modules.automation.autoReindeer = function () {
 
         if (
-            CH.utils.enabled("autoReindeer")
-            && typeof Game !== "undefined"
+            CH.utils.enabled("autoReindeer") &&
+            typeof Game !== "undefined"
         ) {
 
             Game.shimmers.forEach(shimmer => {
 
-                if (
-                    shimmer.type === "reindeer"
-                ) {
-
+                if (shimmer.type === "reindeer") {
                     shimmer.pop();
-
                 }
 
             });
@@ -88,121 +70,55 @@
     };
 
 
-
-    // Smart upgrade buying
-CH.modules.automation.autoUpgrade = function () {
-
-    if (
-        CH.utils.enabled("autoUpgrade")
-        && typeof Game !== "undefined"
-    ) {
-
-
-        if (!CH.modules.economy) {
-            return;
-        }
-
-
-        let best =
-            CH.modules.economy.getBestUpgrade();
-
-
-        if (best) {
-
-            best.buy();
-
-            CH.utils.log(
-                "Bought best upgrade: "
-                + best.name
-            );
-
-        }
-
-    }
-
-};
+    // Smart upgrades
+    CH.modules.automation.autoUpgrade = function () {
 
         if (
-            CH.utils.enabled("autoUpgrade")
-            && typeof Game !== "undefined"
+            CH.utils.enabled("autoUpgrade") &&
+            typeof Game !== "undefined"
         ) {
 
+            if (!CH.modules.economy) return;
 
-            Game.UpgradesInStore.forEach(upgrade => {
+            let best =
+                CH.modules.economy.getBestUpgrade();
 
-                if (
-                    upgrade.canBuy()
-                ) {
+            if (best) {
+                best.buy();
 
-                    upgrade.buy();
-
-                }
-
-            });
+                CH.utils.log(
+                    "Bought best upgrade: " + best.name
+                );
+            }
 
         }
 
     };
 
 
-
-   // Smart building buying
-CH.modules.automation.autoBuild = function () {
-
-    if (
-        CH.utils.enabled("autoBuild")
-        && typeof Game !== "undefined"
-    ) {
-
-        if (!CH.modules.economy) {
-            return;
-        }
-
-        let best =
-            CH.modules.economy.getBestBuilding();
+    // Smart buildings
+    CH.modules.automation.autoBuild = function () {
 
         if (
-            best &&
-            best.getPrice() <= Game.cookies
+            CH.utils.enabled("autoBuild") &&
+            typeof Game !== "undefined"
         ) {
 
-            best.buy();
+            if (!CH.modules.economy) return;
 
-            CH.utils.log(
-                "Bought best building: " + best.name
-            );
+            let best =
+                CH.modules.economy.getBestBuilding();
 
-        }
+            if (
+                best &&
+                best.getPrice() <= Game.cookies
+            ) {
 
-    }
+                best.buy();
 
-};
-
-        if (
-            CH.utils.enabled("autoBuild")
-            && typeof Game !== "undefined"
-        ) {
-
-
-            let buildings =
-                Game.ObjectsById.filter(
-                    building =>
-                    building.getPrice()
-                    <= Game.cookies
+                CH.utils.log(
+                    "Bought best building: " + best.name
                 );
-
-
-            if (buildings.length > 0) {
-
-
-                buildings.sort(
-                    (a, b) =>
-                    b.storedCps -
-                    a.storedCps
-                );
-
-
-                buildings[0].buy();
 
             }
 
@@ -211,10 +127,8 @@ CH.modules.automation.autoBuild = function () {
     };
 
 
-
     // Start automation loops
     CH.modules.automation.start = function () {
-
 
         setInterval(() => {
 
@@ -227,7 +141,6 @@ CH.modules.automation.autoBuild = function () {
         setInterval(() => {
 
             CH.modules.automation.autoGolden();
-
             CH.modules.automation.autoReindeer();
 
         }, 100);
@@ -237,11 +150,9 @@ CH.modules.automation.autoBuild = function () {
         setInterval(() => {
 
             CH.modules.automation.autoUpgrade();
-
             CH.modules.automation.autoBuild();
 
         }, 1000);
-
 
 
         CH.utils.log(
@@ -251,8 +162,6 @@ CH.modules.automation.autoBuild = function () {
     };
 
 
-
-    // Start when mod loads
     CH.modules.automation.start();
 
 
