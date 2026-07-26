@@ -98,7 +98,7 @@
 
         style.rel = "stylesheet";
 
-        style.href = "CookieHelper/" + file;
+        style.href = "https://raw.githubusercontent.com/maxhumphrey2010-maker/cookiehelper/main/" + file;
 
         document.head.appendChild(style);
 
