@@ -154,28 +154,22 @@ CH.modules.automation.autoBuild = function () {
         && typeof Game !== "undefined"
     ) {
 
-
         if (!CH.modules.economy) {
             return;
         }
 
-
         let best =
             CH.modules.economy.getBestBuilding();
 
-
         if (
-            best
-            &&
-            best.getPrice()
-            <= Game.cookies
+            best &&
+            best.getPrice() <= Game.cookies
         ) {
 
             best.buy();
 
             CH.utils.log(
-                "Bought best building: "
-                + best.name
+                "Bought best building: " + best.name
             );
 
         }
